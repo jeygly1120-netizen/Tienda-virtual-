@@ -157,3 +157,548 @@ if (imagenGuardada) {
     vista.style.display = "block";
 }
 </script>
+// ===============================
+// CONFIGURACIÓN DE LA TIENDA
+// ===============================
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+
+// Mostrar panel de configuración
+function mostrarPanel() {
+    document.getElementById("panelConfiguracion").style.display = "flex";
+
+    cargarConfiguracion();
+    mostrarAdministracion();
+}
+
+
+// Cerrar panel
+function cerrarPanel() {
+    document.getElementById("panelConfiguracion").style.display = "none";
+}
+
+
+// ===============================
+// GUARDAR CONFIGURACIÓN
+// ===============================
+
+function guardarConfiguracion() {
+
+    const nombre = document.getElementById("nombreTienda").value.trim();
+
+    if (nombre !== "") {
+        localStorage.setItem("nombreTienda", nombre);
+
+        document.querySelector(".header h1").textContent =
+            "🛍️ " + nombre;
+    }
+
+    localStorage.setItem(
+        "productos",
+        JSON.stringify(productos)
+    );
+
+    alert("✅ Configuración guardada correctamente");
+}
+
+
+// Cargar configuración
+function cargarConfiguracion() {
+
+    const nombreGuardado =
+        localStorage.getItem("nombreTienda");
+
+    if (nombreGuardado) {
+
+        document.getElementById("nombreTienda").value =
+            nombreGuardado;
+
+        document.querySelector(".header h1").textContent =
+            "🛍️ " + nombreGuardado;
+    }
+}
+
+
+// ===============================
+// AGREGAR PRODUCTO
+// ===============================
+
+function agregarProducto() {
+
+    const nombre =
+        document.getElementById("nombreProducto").value.trim();
+
+    const precio =
+        parseFloat(
+            document.getElementById("precioProducto").value
+        );
+
+    const archivo =
+        document.getElementById("imagenProducto").files[0];
+
+
+    if (!nombre) {
+        alert("Escribe el nombre del producto.");
+        return;
+    }
+
+    if (isNaN(precio) || precio < 0) {
+        alert("Introduce un precio válido.");
+        return;
+    }
+
+
+    // Si hay imagen
+    if (archivo) {
+
+        const lector = new FileReader();
+
+        lector.onload = function(evento) {
+
+            crearProducto(
+                nombre,
+                precio,
+                evento.target.result
+            );
+
+        };
+
+        lector.readAsDataURL(archivo);
+
+    } else {
+
+        crearProducto(
+            nombre,
+            precio,
+            ""
+        );
+    }
+}
+
+
+// Crear producto
+function crearProducto(nombre, precio, imagen) {
+
+    const producto = {
+
+        id: Date.now(),
+
+        nombre: nombre,
+
+        precio: precio,
+
+        imagen: imagen
+    };
+
+
+    productos.push(producto);
+
+
+    localStorage.setItem(
+        "productos",
+        JSON.stringify(productos)
+    );
+
+
+    // Limpiar formulario
+
+    document.getElementById("nombreProducto").value = "";
+
+    document.getElementById("precioProducto").value = "";
+
+    document.getElementById("imagenProducto").value = "";
+
+
+    mostrarProductos();
+
+    mostrarAdministracion();
+
+
+    alert("✅ Producto agregado");
+}
+
+
+// ===============================
+// MOSTRAR PRODUCTOS
+// ===============================
+
+function mostrarProductos(lista = productos) {
+
+    const contenedor =
+        document.getElementById("productos");
+
+    contenedor.innerHTML = "";
+
+
+    if (lista.length === 0) {
+
+        contenedor.innerHTML =
+            "<p>No hay productos disponibles.</p>";
+
+        return;
+    }
+
+
+    lista.forEach(producto => {
+
+        const tarjeta =
+            document.createElement("div");
+
+        tarjeta.className = "producto";
+
+
+        tarjeta.innerHTML = `
+
+            ${
+                producto.imagen
+                ? `<img src="${producto.imagen}" alt="${producto.nombre}">`
+                : `<div class="sin-imagen">📦</div>`
+            }
+
+            <h3>${producto.nombre}</h3>
+
+            <p class="precio">
+                S/ ${producto.precio.toFixed(2)}
+            </p>
+
+            <button onclick="agregarAlCarrito(${producto.id})">
+                🛒 Agregar al carrito
+            </button>
+
+        `;
+
+
+        contenedor.appendChild(tarjeta);
+
+    });
+}
+
+
+// ===============================
+// ADMINISTRACIÓN
+// ===============================
+
+function mostrarAdministracion() {
+
+    const lista =
+        document.getElementById("listaAdministracion");
+
+    lista.innerHTML = "";
+
+
+    if (productos.length === 0) {
+
+        lista.innerHTML =
+            "<p>No hay productos.</p>";
+
+        return;
+    }
+
+
+    productos.forEach(producto => {
+
+        const elemento =
+            document.createElement("div");
+
+        elemento.className =
+            "producto-admin";
+
+
+        elemento.innerHTML = `
+
+            <strong>${producto.nombre}</strong>
+
+            <span>
+                S/ ${producto.precio.toFixed(2)}
+            </span>
+
+            <button onclick="editarProducto(${producto.id})">
+                ✏️ Editar
+            </button>
+
+            <button onclick="eliminarProducto(${producto.id})">
+                🗑️ Eliminar
+            </button>
+
+        `;
+
+
+        lista.appendChild(elemento);
+
+    });
+}
+
+
+// ===============================
+// EDITAR PRODUCTO
+// ===============================
+
+function editarProducto(id) {
+
+    const producto =
+        productos.find(p => p.id === id);
+
+    if (!producto) return;
+
+
+    const nuevoNombre =
+        prompt(
+            "Nombre del producto:",
+            producto.nombre
+        );
+
+
+    if (nuevoNombre === null) return;
+
+
+    const nuevoPrecio =
+        prompt(
+            "Precio:",
+            producto.precio
+        );
+
+
+    if (nuevoPrecio === null) return;
+
+
+    const precio =
+        parseFloat(nuevoPrecio);
+
+
+    if (!nuevoNombre.trim() ||
+        isNaN(precio) ||
+        precio < 0) {
+
+        alert("Datos no válidos.");
+        return;
+    }
+
+
+    producto.nombre =
+        nuevoNombre.trim();
+
+    producto.precio =
+        precio;
+
+
+    localStorage.setItem(
+        "productos",
+        JSON.stringify(productos)
+    );
+
+
+    mostrarProductos();
+
+    mostrarAdministracion();
+
+
+    alert("✅ Producto actualizado");
+}
+
+
+// ===============================
+// ELIMINAR PRODUCTO
+// ===============================
+
+function eliminarProducto(id) {
+
+    const confirmar =
+        confirm(
+            "¿Quieres eliminar este producto?"
+        );
+
+
+    if (!confirmar) return;
+
+
+    productos =
+        productos.filter(
+            producto => producto.id !== id
+        );
+
+
+    localStorage.setItem(
+        "productos",
+        JSON.stringify(productos)
+    );
+
+
+    mostrarProductos();
+
+    mostrarAdministracion();
+
+
+    alert("🗑️ Producto eliminado");
+}
+
+
+// ===============================
+// BUSCADOR
+// ===============================
+
+function buscarProductos() {
+
+    const texto =
+        document
+            .getElementById("buscador")
+            .value
+            .toLowerCase();
+
+
+    const resultados =
+        productos.filter(producto =>
+            producto.nombre
+                .toLowerCase()
+                .includes(texto)
+        );
+
+
+    mostrarProductos(resultados);
+}
+
+
+// ===============================
+// CARRITO
+// ===============================
+
+let carrito =
+    JSON.parse(
+        localStorage.getItem("carrito")
+    ) || [];
+
+
+function agregarAlCarrito(id) {
+
+    const producto =
+        productos.find(p => p.id === id);
+
+
+    if (!producto) return;
+
+
+    carrito.push(producto);
+
+
+    localStorage.setItem(
+        "carrito",
+        JSON.stringify(carrito)
+    );
+
+
+    mostrarCarrito();
+
+    alert("🛒 Producto agregado al carrito");
+}
+
+
+function mostrarCarrito() {
+
+    const lista =
+        document.getElementById("listaCarrito");
+
+    const total =
+        document.getElementById("total");
+
+
+    lista.innerHTML = "";
+
+
+    if (carrito.length === 0) {
+
+        lista.innerHTML =
+            "Tu carrito está vacío.";
+
+        total.textContent =
+            "0.00";
+
+        return;
+    }
+
+
+    let suma = 0;
+
+
+    carrito.forEach((producto, indice) => {
+
+        suma += producto.precio;
+
+
+        const item =
+            document.createElement("div");
+
+
+        item.innerHTML = `
+
+            <p>
+                ${producto.nombre}
+                - S/ ${producto.precio.toFixed(2)}
+
+                <button onclick="quitarDelCarrito(${indice})">
+                    ❌
+                </button>
+            </p>
+
+        `;
+
+
+        lista.appendChild(item);
+
+    });
+
+
+    total.textContent =
+        suma.toFixed(2);
+}
+
+
+// Quitar producto del carrito
+function quitarDelCarrito(indice) {
+
+    carrito.splice(indice, 1);
+
+
+    localStorage.setItem(
+        "carrito",
+        JSON.stringify(carrito)
+    );
+
+
+    mostrarCarrito();
+}
+
+
+// Vaciar carrito
+function vaciarCarrito() {
+
+    carrito = [];
+
+
+    localStorage.setItem(
+        "carrito",
+        JSON.stringify(carrito)
+    );
+
+
+    mostrarCarrito();
+}
+
+
+// ===============================
+// INICIAR TIENDA
+// ===============================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        cargarConfiguracion();
+
+        mostrarProductos();
+
+        mostrarAdministracion();
+
+        mostrarCarrito();
+
+    }
+);
