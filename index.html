@@ -157,7 +157,6 @@ if (imagenGuardada) {
     vista.style.display = "block";
 }
 </script>
-// ==
 
 
 
@@ -185,52 +184,11 @@ if (imagenGuardada) {
                 🛒 Agregar al carrito
             </button>
 
-        `;
-
-
-        contenedor.appendChild(tarjeta);
-
-    });
-}
-
-
-// ===============================
-// ADMINISTRACIÓN
-// ===============================
-
-function mostrarAdministracion() {
-
-    const lista =
-        document.getElementById("listaAdministracion");
-
-    lista.innerHTML = "";
-
-
-    if (productos.length === 0) {
-
-        lista.innerHTML =
-            "<p>No hay productos.</p>";
-
-        return;
-    }
-
-
-    productos.forEach(producto => {
-
-        const elemento =
-            document.createElement("div");
-
-        elemento.className =
-            "producto-admin";
-
-
-        elemento.innerHTML = `
+        
 
             <strong>${producto.nombre}</strong>
 
-            <span>
-                S/ ${producto.precio.toFixed(2)}
-            </span>
+    
 
             <button onclick="editarProducto(${producto.id})">
                 ✏️ Editar
