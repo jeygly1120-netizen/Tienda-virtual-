@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jeygly Store - tienda virtual moderna">
+  <title>Jeygly Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">✨ Bienvenido a Jeygly Store · Compra fácil y rápido</div>
+
+  <header class="header">
+    <a class="brand" href="#">
+      <span class="brand-mark">J</span>
+      <span>
+        <strong id="storeName">Jeygly Store</strong>
+        <small id="storeTagline">Tu tienda, tu estilo</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a href="#inicio">Inicio</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#productos">Productos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="actions">
+      <button class="icon-btn" id="themeBtn" title="Cambiar tema">☾</button>
+      <button class="cart-btn" id="cartBtn">🛒 <span>Carrito</span><b id="cartCount">0</b></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-content">
+        <span class="eyebrow">NUEVA EXPERIENCIA DE COMPRA</span>
+        <h1>Descubre algo <span>especial</span> para ti.</h1>
+        <p>Explora productos seleccionados, ofertas y novedades en una tienda moderna, rápida y personalizada.</p>
+        <div class="hero-buttons">
+          <a class="primary-btn" href="#productos">Comprar ahora →</a>
+          <button class="ghost-btn" id="customizeBtn">⚙ Personalizar tienda</button>
+        </div>
+        <div class="hero-stats">
+          <div><b>100+</b><small>Productos</small></div>
+          <div><b>24/7</b><small>Pedidos</small></div>
+          <div><b>WhatsApp</b><small>Atención directa</small></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="orb orb1"></div><div class="orb orb2"></div>
+        <div class="floating-card card-a">🔥 Oferta especial</div>
+        <div class="floating-card card-b">⭐ Productos destacados</div>
+        <div class="product-visual">🛍️</div>
+      </div>
+    </section>
+
+    <section class="section" id="categorias">
+      <div class="section-heading">
+        <div><span class="eyebrow">EXPLORA</span><h2>Categorías</h2></div>
+      </div>
+      <div class="categories" id="categoryList"></div>
+    </section>
+
+    <section class="section" id="productos">
+      <div class="section-heading products-heading">
+        <div><span class="eyebrow">CATÁLOGO</span><h2>Productos para ti</h2></div>
+        <div class="search-wrap"><input id="searchInput" type="search" placeholder="🔎 Buscar producto..."></div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="promo">
+      <div><span class="eyebrow">VENTA DIRECTA</span><h2>¿Encontraste lo que buscas?</h2><p>Agrega tus productos al carrito y envía el pedido directamente por WhatsApp.</p></div>
+      <button class="primary-btn" id="promoCartBtn">Ver mi carrito →</button>
+    </section>
+
+    <section class="section features">
+      <div class="feature"><span>🚚</span><h3>Entrega</h3><p>Configura tus métodos de entrega.</p></div>
+      <div class="feature"><span>💬</span><h3>WhatsApp</h3><p>Recibe pedidos directamente.</p></div>
+      <div class="feature"><span>🔒</span><h3>Compra simple</h3><p>Proceso rápido y cómodo.</p></div>
+      <div class="feature"><span>✨</span><h3>Personalizable</h3><p>Cambia colores, textos y productos.</p></div>
+    </section>
+  </main>
+
+  <footer id="contacto">
+    <div><strong id="footerName">Jeygly Store</strong><p>Tu tienda virtual personalizada.</p></div>
+    <div><p>Pedidos por WhatsApp</p><strong id="footerWhatsapp">Configura tu número</strong></div>
+    <div><p>© <span id="year"></span> Jeygly Store</p></div>
+  </footer>
+
+  <!-- CART -->
+  <div class="overlay" id="cartOverlay">
+    <aside class="drawer">
+      <div class="drawer-head"><h2>🛒 Mi carrito</h2><button class="close" data-close="cartOverlay">×</button></div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-total"><span>Total</span><strong id="cartTotal">S/ 0.00</strong></div>
+      <button class="primary-btn full" id="whatsappBtn">Enviar pedido por WhatsApp</button>
+      <button class="text-btn" id="clearCartBtn">Vaciar carrito</button>
+    </aside>
+  </div>
+
+  <!-- CUSTOMIZER -->
+  <div class="overlay" id="customOverlay">
+    <div class="modal">
+      <div class="drawer-head"><h2>⚙ Personalizar tienda</h2><button class="close" data-close="customOverlay">×</button></div>
+      <div class="form-grid">
+        <label>Nombre de tienda<input id="cfgName" type="text"></label>
+        <label>Subtítulo<input id="cfgTagline" type="text"></label>
+        <label>WhatsApp<input id="cfgWhatsapp" type="text" placeholder="51999999999"></label>
+        <label>Moneda<input id="cfgCurrency" type="text" value="S/"></label>
+        <label>Color principal<input id="cfgColor" type="color"></label>
+        <label>Color secundario<input id="cfgAccent" type="color"></label>
+      </div>
+      <div class="custom-actions">
+        <button class="ghost-btn" id="resetBtn">Restablecer</button>
+        <button class="primary-btn" id="saveConfigBtn">Guardar cambios</button>
+      </div>
+      <p class="hint">Los cambios se guardan en este navegador. Para publicarlos para todos, actualiza los archivos del sitio.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
