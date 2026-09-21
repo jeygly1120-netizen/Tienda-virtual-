@@ -121,4 +121,39 @@
 
   <script src="script.js"></script>
 </body>
-</html>
+</html><input type="file" id="imagen" accept="image/*">
+
+<br><br>
+
+<img id="vistaPrevia" style="max-width:300px; display:none;">
+
+<script>
+const input = document.getElementById("imagen");
+const vista = document.getElementById("vistaPrevia");
+
+input.addEventListener("change", function () {
+    const archivo = this.files[0];
+
+    if (!archivo) return;
+
+    const lector = new FileReader();
+
+    lector.onload = function (e) {
+        vista.src = e.target.result;
+        vista.style.display = "block";
+
+        // Guardar la imagen en el navegador
+        localStorage.setItem("imagenGuardada", e.target.result);
+    };
+
+    lector.readAsDataURL(archivo);
+});
+
+// Mostrar la imagen guardada al volver a abrir la página
+const imagenGuardada = localStorage.getItem("imagenGuardada");
+
+if (imagenGuardada) {
+    vista.src = imagenGuardada;
+    vista.style.display = "block";
+}
+</script>
